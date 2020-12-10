@@ -38,6 +38,12 @@ const { response } = require("express");
 //NOTE: employee information questions
 const promptQuestions = [
     {
+        type: "list",
+        message: "What is your job title?",
+        name: "jobInput",
+        choices: ["Intern", "Engineer", "Manager"],
+    },
+    {
         type: "input",
         message: "Enter your name",
         name: "nameInput",
@@ -52,12 +58,6 @@ const promptQuestions = [
         message: "What is your Employee ID?",
         name: "idInput",
     },
-    {
-        type: "list",
-        message: "What is your job title?",
-        name: "jobInput",
-        choices: ["Intern", "Engineer", "Manager"],
-    },
 ]
 
 
@@ -68,6 +68,44 @@ async function employeeInfo() {
         employeeID = response.idInput;
         employeeEmail = response.emailInput;
         employeeJobTitle = response.jobInput
+
+
+        // NOTE: Different job title will be given an addition question.
+        if (response.jobInput === "Intern") {
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "What school did you attend?",
+                    name: "schoolInput",
+                }
+            ]).then((response) => {
+                const intern = new Intern(employeeName, employeeID, employeeEmail, response.schoolInput)
+                console.log(intern)
+            })
+        } else if (response.jobInput === "Engineer") {
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "What is your gitHub profile?",
+                    name: "gitHubInput",
+                }
+            ]).then((response) => {
+                const engineer = new Engineer(employeeName, employeeID, employeeEmail, response.gitHubInput)
+                console.log(engineer)
+            })
+        }
+        else if (response.jobInput === "Manager") {
+            inquirer.prompt([
+                {
+                    type: "input",
+                    message: "What is your office number?",
+                    name: "officeNumInput",
+                }
+            ]).then((response) => {
+                const manager = new Manager(employeeName, employeeID, employeeEmail, response.officeNumInput)
+                console.log(manager)
+            })
+        }
     })
 }
 
