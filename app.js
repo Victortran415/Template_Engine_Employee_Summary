@@ -9,6 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { response } = require("express");
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -34,9 +35,8 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
-
-function promptQuestions() {
-    return inquirer.prompt = ([
+//NOTE: employee information questions
+const promptQuestions = [
     {
         type: "input",
         message: "Enter your name",
@@ -58,5 +58,17 @@ function promptQuestions() {
         name: "jobInput",
         choices: ["Intern", "Engineer", "Manager"],
     },
-    ])
+]
+
+
+async function employeeInfo() {
+    await inquirer.prompt(promptQuestions) 
+    .then((response) => {
+        employeeName = response.nameInput;
+        employeeID = response.idInput;
+        employeeEmail = response.emailInput;
+        employeeJobTitle = response.jobInput
+    })
 }
+
+employeeInfo()
