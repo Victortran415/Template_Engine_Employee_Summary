@@ -39,27 +39,45 @@ const { response } = require("express");
 const promptQuestions = [
     {
         type: "list",
-        message: "What is your job title?",
+        message: "What is your job title?:",
         name: "jobInput",
         choices: ["Intern", "Engineer", "Manager"],
     },
     {
         type: "input",
-        message: "Enter your name",
+        message: "Enter your fullname:",
         name: "nameInput",
     },
     {
         type: "input",
-        message: "Enter your email",
+        message: "Enter your email address:",
         name: "emailInput",
     },
     {
         type: "input",
-        message: "What is your Employee ID?",
+        message: "What is your Employee ID?:",
         name: "idInput",
     },
 ]
 
+async function numOfMembers() {
+    await inquirer.prompt([
+        {
+            type: "list",
+            message: "Need to add another member?",
+            name: "membersInput",
+            choices: ["Yes", "No"]
+        }
+    ]).then((res) => {
+        if (res.membersInput === "Yes") {
+            console.log("add another member")
+            employeeInfo()
+        }
+    })
+    
+}
+
+let teamMembers = []
 
 async function employeeInfo() {
     await inquirer.prompt(promptQuestions) 
@@ -71,39 +89,48 @@ async function employeeInfo() {
 
 
         // NOTE: Different job title will be given an addition question.
-        if (response.jobInput === "Intern") {
+        if (employeeJobTitle === "Intern") {
             inquirer.prompt([
                 {
                     type: "input",
-                    message: "What school did you attend?",
+                    message: "What school did you attend or currently attending?:",
                     name: "schoolInput",
                 }
             ]).then((response) => {
                 const intern = new Intern(employeeName, employeeID, employeeEmail, response.schoolInput)
                 console.log(intern)
+                teamMembers.push(intern)
+
+                numOfMembers()
             })
-        } else if (response.jobInput === "Engineer") {
+        } else if (employeeJobTitle === "Engineer") {
             inquirer.prompt([
                 {
                     type: "input",
-                    message: "What is your gitHub profile?",
+                    message: "What is your gitHub profile?:",
                     name: "gitHubInput",
                 }
             ]).then((response) => {
                 const engineer = new Engineer(employeeName, employeeID, employeeEmail, response.gitHubInput)
                 console.log(engineer)
+                teamMembers.push(engineer)
+
+                numOfMembers()
             })
         }
-        else if (response.jobInput === "Manager") {
+        else if (employeeJobTitle === "Manager") {
             inquirer.prompt([
                 {
                     type: "input",
-                    message: "What is your office number?",
+                    message: "What is your office number?:",
                     name: "officeNumInput",
                 }
             ]).then((response) => {
                 const manager = new Manager(employeeName, employeeID, employeeEmail, response.officeNumInput)
                 console.log(manager)
+                teamMembers.push(manager)
+
+                numOfMembers()
             })
         }
     })
