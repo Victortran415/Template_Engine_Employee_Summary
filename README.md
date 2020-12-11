@@ -25,14 +25,16 @@
   - One the User fill out all the questios, the application will generate a template under `output/team.html` file.
 
 ## License
-    MIT License
+  MIT License
 
 ## Contribution
   Victor Tran
 
 ## Tests
   
+  <img src= "Assets/Video/template.gif" style="width: 600px">
 
 ## Questions?
   Github: Victortran415
+
   Email: victortran415@gmail.com
