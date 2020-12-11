@@ -60,8 +60,8 @@ const promptQuestions = [
     },
 ]
 
-async function numOfMembers() {
-    await inquirer.prompt([
+function numOfMembers() {
+    inquirer.prompt([
         {
             type: "list",
             message: "Need to add another member?",
@@ -72,6 +72,9 @@ async function numOfMembers() {
         if (res.membersInput === "Yes") {
             console.log("add another member")
             employeeInfo()
+        } else {
+            output()
+            return
         }
     })
     
@@ -102,6 +105,7 @@ async function employeeInfo() {
                 teamMembers.push(intern)
 
                 numOfMembers()
+                output()
             })
         } else if (employeeJobTitle === "Engineer") {
             inquirer.prompt([
@@ -116,9 +120,9 @@ async function employeeInfo() {
                 teamMembers.push(engineer)
 
                 numOfMembers()
+                output()
             })
-        }
-        else if (employeeJobTitle === "Manager") {
+        } else if (employeeJobTitle === "Manager") {
             inquirer.prompt([
                 {
                     type: "input",
@@ -131,9 +135,19 @@ async function employeeInfo() {
                 teamMembers.push(manager)
 
                 numOfMembers()
+                output()
             })
         }
     })
 }
 
 employeeInfo()
+
+function output() {
+    fs.writeFile(outputPath, render(teamMembers), function (err) {
+    if (err) {
+    return console.log(err);
+    }
+    console.log("\n Created a Dream Team");
+    })
+}
